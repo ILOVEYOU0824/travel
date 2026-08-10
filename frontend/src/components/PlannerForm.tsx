@@ -269,7 +269,8 @@ export function PlannerForm() {
         </p>
         {!authConfigured ? (
           <p className="text-xs text-ember/90">
-            Supabase·카카오 키가 frontend/.env에 없어 로그인을 켤 수 없습니다.
+            로그인 설정이 없습니다. Netlify Environment에 VITE_SUPABASE_URL /
+            VITE_SUPABASE_ANON_KEY / VITE_KAKAO_REST_API_KEY를 넣고 다시 배포하세요.
           </p>
         ) : (
           <button

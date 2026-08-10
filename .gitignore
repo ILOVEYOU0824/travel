@@ -14,8 +14,7 @@ dist/
 # 일정 파일 폴백만 제외 (frontend/src/data 는 커밋)
 /data/
 backend/data/
-frontend/public/generated/*
-!frontend/public/generated/.gitkeep
+# 생성 이미지는 배포에 필요 — 커밋함
 .DS_Store
 Thumbs.db
 *.log
