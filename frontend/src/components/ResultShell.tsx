@@ -7,6 +7,7 @@ import { ItineraryMap } from './ItineraryMap'
 import { ReplanBar } from './ReplanBar'
 import { SaveBar } from './SaveBar'
 import { SearchHintsBar } from './SearchHintsBar'
+import { PrepChecklist } from './PrepChecklist'
 import { TripControlsBar } from './TripControlsBar'
 import { TripInsightsBar } from './TripInsightsBar'
 
@@ -155,6 +156,7 @@ export function ResultShell() {
                   {result.flight_note ? <p className="text-gold/80">{result.flight_note}</p> : null}
                 </div>
               )}
+              <PrepChecklist />
             </section>
           ) : null}
 
