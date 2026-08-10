@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { formatDateLabel, hoursConflictWarning, summarizeDay } from '../lib/format'
 import type { ItineraryDay } from '../types'
 import { usePlannerStore } from '../store/plannerStore'
+import { DayMoveSummary } from './DayMoveSummary'
 import {
   AirportArrivalBlock,
   AirportDepartureBlock,
@@ -126,6 +127,8 @@ export function DayTimeline({
           ) : null}
         </p>
       ) : null}
+
+      {day ? <DayMoveSummary day={day} /> : null}
 
       {!day?.items.length && !arrival && !departure ? (
         <p className="jp-panel text-center text-sm text-mist/70">
