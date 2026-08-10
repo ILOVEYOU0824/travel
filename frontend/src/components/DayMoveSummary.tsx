@@ -88,7 +88,7 @@ export function DayMoveSummary({ day }: { day: ItineraryDay }) {
         ))}
       </ol>
       <p className="mt-2.5 text-[11px] leading-relaxed text-mist/45">
-        노선·시간은 Google Routes 기준입니다. 다른 경로·실시간 요금은 구글맵에서 확인하세요.
+        참고용 한 가지 경로입니다. 다른 경로·요금·출발역 변경은 구글맵에서 하세요.
         {mapsUri ? (
           <>
             {' '}
