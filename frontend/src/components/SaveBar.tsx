@@ -3,7 +3,7 @@ import { exportItineraryPdf } from '../lib/exportPdf'
 import { kakaoShareConfigured, shareTripToKakao } from '../lib/kakaoShare'
 import { usePlannerStore } from '../store/plannerStore'
 
-export function SaveBar() {
+export function SaveBar({ embedded = false }: { embedded?: boolean }) {
   const result = usePlannerStore((s) => s.result)
   const tripId = usePlannerStore((s) => s.tripId)
   const tripTitle = usePlannerStore((s) => s.tripTitle)
@@ -86,8 +86,15 @@ export function SaveBar() {
   const banner = status || saveMessage
 
   return (
-    <div className="border-b border-white/10 px-4 py-3 sm:px-6">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2.5">
+    <div
+      className={
+        embedded
+          ? 'border-b border-white/10 px-4 py-4'
+          : 'border-b border-white/10 px-4 py-3 sm:px-6'
+      }
+    >
+      <div className={`flex flex-col gap-2.5 ${embedded ? '' : 'mx-auto max-w-7xl'}`}>
+        {embedded ? <p className="jp-legend text-sm">저장 · 공유</p> : null}
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
           <label className="flex min-w-0 flex-1 flex-col gap-1 text-[11px] tracking-wide text-mist/60">
             일정 제목

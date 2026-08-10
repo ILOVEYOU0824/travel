@@ -8,7 +8,7 @@ const CHIPS = [
   '카페 하나 더 넣어줘',
 ] as const
 
-export function ReplanBar() {
+export function ReplanBar({ embedded = false }: { embedded?: boolean }) {
   const replanPrompt = usePlannerStore((s) => s.replanPrompt)
   const replanning = usePlannerStore((s) => s.replanning)
   const replanMessage = usePlannerStore((s) => s.replanMessage)
@@ -31,14 +31,19 @@ export function ReplanBar() {
   }
 
   return (
-    <div className="border-b border-white/10 px-4 py-2.5 sm:px-6">
+    <div className={embedded ? 'px-4 py-4' : 'border-b border-white/10 px-4 py-2.5 sm:px-6'}>
       <form
-        className="mx-auto flex max-w-7xl flex-col gap-2"
+        className={`flex flex-col gap-3 ${embedded ? '' : 'mx-auto max-w-7xl gap-2'}`}
         onSubmit={(e) => {
           e.preventDefault()
           void replan()
         }}
       >
+        {embedded ? (
+          <p className="text-xs text-mist/55">
+            먹고 싶은 것·빼고 싶은 장소를 적으면 Places에서 찾아 반영합니다.
+          </p>
+        ) : null}
         <div className="flex flex-wrap items-center gap-2">
           <p className="jp-legend shrink-0 text-sm">일정 수정</p>
           {CHIPS.map((chip) => (
@@ -75,12 +80,18 @@ export function ReplanBar() {
         </div>
       </form>
       {replanMessage ? (
-        <p className="mx-auto mt-2 max-w-7xl whitespace-pre-line text-xs text-gold">
+        <p
+          className={`mt-2 whitespace-pre-line text-xs text-gold ${embedded ? 'px-0' : 'mx-auto max-w-7xl'}`}
+        >
           {replanMessage}
         </p>
       ) : null}
       {error ? (
-        <p className="mx-auto mt-2 max-w-7xl whitespace-pre-line text-xs text-ember">{error}</p>
+        <p
+          className={`mt-2 whitespace-pre-line text-xs text-ember ${embedded ? 'px-0' : 'mx-auto max-w-7xl'}`}
+        >
+          {error}
+        </p>
       ) : null}
     </div>
   )

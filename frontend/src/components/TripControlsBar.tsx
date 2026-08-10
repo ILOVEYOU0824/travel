@@ -25,8 +25,8 @@ const MODES: Array<{ id: TravelModePref; label: string }> = [
   { id: 'DRIVE', label: '자동차' },
 ]
 
-/** 준비 CTA + 이동수단 — 한 줄로 묶어 상단을 덜 복잡하게 */
-export function TripControlsBar() {
+/** 준비 CTA + 이동수단 */
+export function TripControlsBar({ embedded = false }: { embedded?: boolean }) {
   const prepCtas = usePlannerStore((s) => s.result?.prep_ctas)
   const arrivalCta = usePlannerStore(
     (s) => s.result?.days[0]?.arrival_from_airport?.connectivity_cta,
@@ -39,8 +39,8 @@ export function TripControlsBar() {
   const ctas = prepCtas?.length ? prepCtas : arrivalCta ? [arrivalCta] : []
 
   return (
-    <div className="border-b border-white/10 px-4 py-2.5 sm:px-6">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2.5">
+    <div className={embedded ? 'px-4 py-4' : 'border-b border-white/10 px-4 py-2.5 sm:px-6'}>
+      <div className={`flex flex-col gap-4 ${embedded ? '' : 'mx-auto max-w-7xl gap-2.5'}`}>
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
           <p className="jp-legend shrink-0 text-sm">준비</p>
           {PREP_LINKS.map((link) => (

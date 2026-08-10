@@ -1,16 +1,9 @@
 import { useEffect } from 'react'
 import { AuthBar } from './components/AuthBar'
-import { DayTimeline } from './components/DayTimeline'
-import { ItineraryMap } from './components/ItineraryMap'
 import { LoadingOverlay } from './components/LoadingOverlay'
 import { PlannerForm } from './components/PlannerForm'
-import { ReplanBar } from './components/ReplanBar'
-import { SaveBar } from './components/SaveBar'
-import { SearchHintsBar } from './components/SearchHintsBar'
-import { TripControlsBar } from './components/TripControlsBar'
-import { TripInsightsBar } from './components/TripInsightsBar'
+import { ResultShell } from './components/ResultShell'
 import { TripsPanel } from './components/TripsPanel'
-import { budgetTierLabel } from './lib/format'
 import { useAuthStore } from './store/authStore'
 import { usePlannerStore } from './store/plannerStore'
 
@@ -18,8 +11,6 @@ export default function App() {
   const result = usePlannerStore((s) => s.result)
   const loading = usePlannerStore((s) => s.loading)
   const error = usePlannerStore((s) => s.error)
-  const selectedDayIndex = usePlannerStore((s) => s.selectedDayIndex)
-  const reset = usePlannerStore((s) => s.reset)
   const openTrip = usePlannerStore((s) => s.openTrip)
   const authInit = useAuthStore((s) => s.init)
   const authReady = useAuthStore((s) => s.ready)
@@ -142,78 +133,7 @@ export default function App() {
           </section>
         </div>
       ) : (
-        <div className="washi-bg min-h-screen text-fog">
-          <header className="border-b border-white/10 px-4 py-4 sm:px-6">
-            <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-              <div className="flex min-w-0 items-start gap-3">
-                <img
-                  src="/generated/seal-tabi.png"
-                  alt=""
-                  className="mt-0.5 h-10 w-10 object-contain"
-                />
-                <div className="min-w-0">
-                  <p className="font-display text-xl tracking-wide text-fog">
-                    JapanTrip
-                    <span className="ml-2 text-xs tracking-[0.2em] text-gold">旅</span>
-                  </p>
-                  <p className="mt-0.5 text-xs text-mist/55">
-                    Google 지도 데이터 기준 · 실제 장소만
-                    {result.validation.removed_items_count > 0
-                      ? ` · 확인되지 않은 ${result.validation.removed_items_count}곳 제외`
-                      : ''}
-                  </p>
-                  {result.budget_tier ? (
-                    <p className="mt-0.5 text-xs text-sea-bright/90">
-                      예산 티어: {budgetTierLabel(result.budget_tier)}
-                      {result.budget_krw_per_person != null
-                        ? ` · 1인 총경비 ${result.budget_krw_per_person.toLocaleString('ko-KR')}원`
-                        : ''}
-                      {result.travelers != null &&
-                      result.travelers > 1 &&
-                      result.budget_krw_total != null
-                        ? ` · 일행 합계 ${result.budget_krw_total.toLocaleString('ko-KR')}원`
-                        : ''}
-                    </p>
-                  ) : null}
-                  {result.budget_note ? (
-                    <p className="mt-0.5 max-w-xl text-xs text-mist/50">{result.budget_note}</p>
-                  ) : null}
-                  {result.flight_note ? (
-                    <p className="mt-0.5 max-w-xl text-xs text-gold/80">{result.flight_note}</p>
-                  ) : null}
-                </div>
-              </div>
-              <div className="flex shrink-0 flex-col items-end gap-2">
-                <AuthBar />
-                <button type="button" onClick={reset} className="jp-btn jp-btn-ghost">
-                  다시 만들기
-                </button>
-              </div>
-            </div>
-          </header>
-
-          <SaveBar />
-          <SearchHintsBar />
-          <TripControlsBar />
-          <ReplanBar />
-          <TripInsightsBar />
-
-          <div className="mx-auto grid max-w-7xl gap-4 p-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-6 lg:p-6">
-            <section className="anim-rise jp-panel jp-timeline-shell relative min-h-[420px] overflow-hidden p-4">
-              <img
-                src="/generated/ui-timeline-panel.png"
-                alt=""
-                className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.09]"
-              />
-              <div className="relative">
-                <DayTimeline days={result.days} selectedDayIndex={selectedDayIndex} />
-              </div>
-            </section>
-            <section className="h-[min(70vh,560px)] overflow-hidden border border-white/10 lg:sticky lg:top-4 lg:h-[calc(100vh-7.5rem)] lg:min-h-[420px]">
-              <ItineraryMap day={result.days[selectedDayIndex]} />
-            </section>
-          </div>
-        </div>
+        <ResultShell />
       )}
     </>
   )

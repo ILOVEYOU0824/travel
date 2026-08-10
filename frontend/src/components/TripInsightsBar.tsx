@@ -13,7 +13,7 @@ import { usePlannerStore } from '../store/plannerStore'
 
 type Tab = 'weather' | 'news' | 'budget' | 'rain' | null
 
-export function TripInsightsBar() {
+export function TripInsightsBar({ embedded = false }: { embedded?: boolean }) {
   const result = usePlannerStore((s) => s.result)
   const startDate = usePlannerStore((s) => s.startDate)
   const endDate = usePlannerStore((s) => s.endDate)
@@ -26,7 +26,7 @@ export function TripInsightsBar() {
   const returnDepartureJst = usePlannerStore((s) => s.returnDepartureJst)
   const setField = usePlannerStore((s) => s.setField)
 
-  const [tab, setTab] = useState<Tab>(null)
+  const [tab, setTab] = useState<Tab>(embedded ? 'weather' : null)
   const [ctx, setCtx] = useState<TripContext | null>(null)
   const [budget, setBudget] = useState<BudgetTracker | null>(null)
   const [rain, setRain] = useState<RainAdvice | null>(null)
@@ -118,6 +118,10 @@ export function TripInsightsBar() {
   const newsCount = ctx?.news.length ?? 0
 
   function toggle(next: Tab) {
+    if (embedded) {
+      setTab(next)
+      return
+    }
     setTab((cur) => (cur === next ? null : next))
   }
 
@@ -157,10 +161,10 @@ export function TripInsightsBar() {
   const rainyWithAlts = rain?.rainy_days.filter((d) => d.rainy && d.suggestions.length) ?? []
 
   return (
-    <section className="border-b border-white/10 px-4 py-2.5 sm:px-6">
-      <div className="mx-auto max-w-7xl">
+    <section className={embedded ? 'px-4 py-4' : 'border-b border-white/10 px-4 py-2.5 sm:px-6'}>
+      <div className={embedded ? '' : 'mx-auto max-w-7xl'}>
         <div className="flex flex-wrap items-center gap-2">
-          <p className="jp-legend shrink-0 text-sm">여행 참고</p>
+          {embedded ? null : <p className="jp-legend shrink-0 text-sm">여행 참고</p>}
           {weatherHint ? (
             <span className="text-xs text-mist/60">
               {region} · {weatherHint}
@@ -169,7 +173,7 @@ export function TripInsightsBar() {
           ) : (
             <span className="text-xs text-mist/45">{region || '지역'} 날씨·소식·예산</span>
           )}
-          <div className="ml-auto flex flex-wrap gap-1.5">
+          <div className={`${embedded ? '' : 'ml-auto'} flex flex-wrap gap-1.5`}>
             {(
               [
                 ['weather', '날씨'],
@@ -191,7 +195,9 @@ export function TripInsightsBar() {
         </div>
 
         {tab ? (
-          <div className="mt-3 border border-white/10 bg-ink/35 px-3 py-3">
+          <div
+            className={`mt-3 border border-white/10 bg-ink/35 px-3 py-3 ${embedded ? 'min-h-[12rem]' : ''}`}
+          >
             {tab === 'weather' ? (
               ctx?.weather.length ? (
                 <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
