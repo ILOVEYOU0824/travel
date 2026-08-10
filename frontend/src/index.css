@@ -1,0 +1,845 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Shippori Mincho", "Noto Serif KR", "Times New Roman", serif;
+  --font-sans: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  /* 스미 · 청자 · 주홍 — 보라/크림 AI 기본톤 회피 */
+  --color-ink: #0f1214;
+  --color-ink-soft: #1a2228;
+  --color-mist: #c9c4bb;
+  --color-fog: #f3efe8;
+  --color-sea: #2f5c56;
+  --color-sea-bright: #6fafa3;
+  --color-ember: #b83228;
+  --color-paper: #e8e2d6;
+  --color-gold: #c4a574;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--color-fog);
+    background: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes map-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes ink-breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes seal-press {
+  0% {
+    opacity: 0;
+    transform: scale(1.12) rotate(-6deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.98) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-2deg);
+  }
+}
+
+@keyframes soft-shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.anim-rise {
+  animation: rise-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-rise-delay {
+  animation: rise-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+}
+
+.anim-map {
+  animation: map-fade 0.9s ease both;
+}
+
+.anim-pulse {
+  animation: ink-breathe 3.2s ease-in-out infinite;
+}
+
+.anim-seal {
+  animation: seal-press 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-kenburns {
+  animation: kenburns 16s ease-out both;
+}
+
+.washi-bg {
+  background-color: var(--color-ink);
+  background-image:
+    linear-gradient(165deg, rgba(15, 18, 20, 0.88), rgba(26, 34, 40, 0.92) 45%, rgba(15, 18, 20, 0.96)),
+    url("/generated/ink-wash-tile.png"),
+    url("/generated/washi-texture.png");
+  background-size: cover, 520px, 380px;
+  background-repeat: no-repeat, repeat, repeat;
+  background-blend-mode: normal, soft-light, multiply;
+}
+
+/* —— 일본풍 UI 프리미티브 (라운드 카드/필 버튼 지양) —— */
+@layer components {
+  .jp-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    overflow: hidden;
+    border-radius: 1px;
+    padding: 0.75rem 1.45rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.18s ease;
+  }
+
+  .jp-btn:disabled {
+    cursor: wait;
+    opacity: 0.55;
+  }
+
+  .jp-btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  .jp-btn-primary {
+    border: 1px solid color-mix(in srgb, var(--color-ember) 75%, #3a120f);
+    background:
+      linear-gradient(
+        125deg,
+        color-mix(in srgb, var(--color-ember) 78%, #fff) 0%,
+        var(--color-ember) 42%,
+        color-mix(in srgb, var(--color-ember) 82%, #5a1812) 100%
+      );
+    background-size: 160% 100%;
+    color: var(--color-fog);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.22),
+      0 8px 22px rgba(184, 50, 40, 0.22);
+  }
+
+  .jp-btn-primary:hover:not(:disabled) {
+    animation: soft-shine 0.7s ease forwards;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+      0 10px 26px rgba(184, 50, 40, 0.3);
+  }
+
+  .jp-btn-secondary {
+    border: 1px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+      color-mix(in srgb, var(--color-ink-soft) 55%, transparent);
+    color: var(--color-fog);
+  }
+
+  .jp-btn-secondary:hover:not(:disabled) {
+    border-color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 14%, transparent);
+    color: #fff8ee;
+  }
+
+  .jp-btn-ghost {
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: color-mix(in srgb, var(--color-ink) 35%, transparent);
+    color: var(--color-mist);
+  }
+
+  .jp-btn-ghost:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--color-gold) 50%, transparent);
+    background: color-mix(in srgb, var(--color-gold) 8%, transparent);
+    color: var(--color-fog);
+  }
+
+  .jp-btn-klook {
+    border: 1px solid color-mix(in srgb, var(--color-sea-bright) 45%, var(--color-ember));
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-sea) 70%, var(--color-ember)) 0%,
+        color-mix(in srgb, var(--color-ember) 85%, #1a2228) 100%
+      );
+    color: var(--color-fog);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 0.95rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .jp-btn-klook:hover {
+    filter: brightness(1.08);
+  }
+
+  .jp-btn-kkday {
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, var(--color-sea-bright));
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-gold) 55%, #2a4a3a) 0%,
+        color-mix(in srgb, var(--color-sea) 75%, #1a2228) 100%
+      );
+    color: var(--color-fog);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 0.95rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .jp-btn-kkday:hover {
+    filter: brightness(1.08);
+  }
+
+  .jp-btn-visit {
+    border: 1px solid color-mix(in srgb, var(--color-sea-bright) 50%, white);
+    background: color-mix(in srgb, var(--color-sea) 35%, #141a20);
+    color: var(--color-fog);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 0.95rem;
+  }
+
+  .jp-btn-visit:hover {
+    filter: brightness(1.1);
+  }
+
+  .jp-btn-insurance {
+    border: 1px solid color-mix(in srgb, #03c75a 45%, white);
+    background: color-mix(in srgb, #03c75a 22%, #141a20);
+    color: var(--color-fog);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 0.95rem;
+  }
+
+  .jp-btn-insurance:hover {
+    filter: brightness(1.1);
+  }
+
+  .jp-btn-kakao {
+    border: 1px solid color-mix(in srgb, #fee500 55%, #3c1e1e);
+    background: #fee500;
+    color: #191919;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    padding: 0.55rem 0.95rem;
+    font-weight: 600;
+  }
+
+  .jp-btn-kakao:hover:not(:disabled) {
+    filter: brightness(0.97);
+  }
+
+  .jp-btn-icon {
+    min-width: 2.6rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+  }
+
+  select.jp-field {
+    cursor: pointer;
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--color-gold) 50%),
+      linear-gradient(135deg, var(--color-gold) 50%, transparent 50%);
+    background-position:
+      calc(100% - 14px) calc(50% - 2px),
+      calc(100% - 9px) calc(50% - 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 1.6rem;
+  }
+
+  select.jp-field option {
+    background: var(--color-ink);
+    color: var(--color-fog);
+  }
+
+  .jp-field {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+    background: transparent;
+    padding: 0.65rem 0.15rem;
+    color: var(--color-fog);
+    outline: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .jp-field::placeholder {
+    color: color-mix(in srgb, var(--color-mist) 55%, transparent);
+  }
+
+  .jp-field:focus {
+    border-bottom-color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 6%, transparent);
+  }
+
+  .jp-field-box {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 1px;
+    background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+    padding: 0.65rem 0.85rem;
+    color: var(--color-fog);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .jp-field-box:focus {
+    border-color: color-mix(in srgb, var(--color-gold) 70%, transparent);
+  }
+
+  /* 네이티브 date/time 팝업을 밝은 테마로 (검정 캘린더 가독성 문제 해결) */
+  .jp-date,
+  .jp-time {
+    color-scheme: light;
+    border: 1px solid rgba(40, 30, 20, 0.12);
+    border-radius: 1px;
+    background: #f7f3ec;
+    color: #1a1612;
+    padding: 0.7rem 0.85rem;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .jp-date:focus,
+  .jp-time:focus {
+    border-color: color-mix(in srgb, var(--color-ember) 55%, #c4a574);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 25%, transparent);
+  }
+
+  .jp-date::-webkit-calendar-picker-indicator,
+  .jp-time::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.7;
+  }
+
+  .jp-flight-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .jp-flight-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .jp-flight-card {
+    border: 1px solid color-mix(in srgb, var(--color-gold) 28%, transparent);
+    border-radius: 1px;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--color-ember) 8%, transparent), transparent 55%),
+      color-mix(in srgb, var(--color-ink) 45%, transparent);
+    padding: 0.9rem 1rem;
+  }
+
+  .jp-flight-label {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: var(--color-gold);
+  }
+
+  .jp-panel {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 42%),
+      color-mix(in srgb, var(--color-ink-soft) 78%, transparent);
+    padding: 1.05rem;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  }
+
+  .jp-brand-mark {
+    width: 3.4rem;
+    height: 3.4rem;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  }
+
+  .jp-section-rule {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-gold) 55%, transparent),
+      transparent
+    );
+  }
+
+  .jp-legend {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    color: var(--color-fog);
+  }
+
+  .jp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 40%, transparent);
+    border-radius: 1px;
+    background: color-mix(in srgb, var(--color-gold) 8%, transparent);
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--color-fog);
+  }
+
+  .jp-tab {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1px;
+    background: transparent;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--color-mist);
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .jp-tab:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    color: var(--color-fog);
+  }
+
+  .jp-tab-active {
+    border-color: var(--color-ember);
+    background: color-mix(in srgb, var(--color-ember) 88%, #000);
+    color: var(--color-fog);
+  }
+
+  .jp-check {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+    border-radius: 1px;
+    background: transparent;
+    vertical-align: middle;
+    accent-color: var(--color-ember);
+  }
+
+  .jp-check:checked {
+    border-color: var(--color-ember);
+    background:
+      linear-gradient(var(--color-ember), var(--color-ember)) center / 0.55rem 0.55rem no-repeat;
+  }
+
+  .jp-range {
+    accent-color: var(--color-ember);
+    height: 0.35rem;
+  }
+
+  .jp-dropdown {
+    border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+    border-radius: 1px;
+    background: var(--color-ink);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  .jp-dropdown-item {
+    width: 100%;
+    padding: 0.55rem 0.85rem;
+    text-align: left;
+    font-size: 0.875rem;
+    color: var(--color-mist);
+  }
+
+  .jp-dropdown-item:hover,
+  .jp-dropdown-item[aria-current="true"] {
+    background: color-mix(in srgb, var(--color-ember) 18%, transparent);
+    color: var(--color-fog);
+  }
+
+  .jp-card {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1px;
+    background: color-mix(in srgb, var(--color-ink-soft) 75%, transparent);
+    text-align: left;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .jp-card:hover {
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+
+  .jp-card-active {
+    border-color: color-mix(in srgb, var(--color-ember) 70%, transparent);
+    background: color-mix(in srgb, var(--color-ember) 12%, var(--color-ink-soft));
+    box-shadow: inset 3px 0 0 var(--color-ember);
+  }
+
+  .jp-timeline-shell {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
+      color-mix(in srgb, var(--color-ink-soft) 82%, transparent);
+  }
+
+  .jp-timeline-hero {
+    border-radius: 1px;
+    min-height: 4.25rem;
+  }
+
+  .jp-airport-card {
+    border: 1px solid color-mix(in srgb, var(--color-gold) 40%, transparent);
+    border-radius: 1px;
+    background: color-mix(in srgb, var(--color-ink-soft) 80%, transparent);
+    box-shadow: inset 3px 0 0 var(--color-gold);
+  }
+
+  .jp-place-card {
+    position: relative;
+    background:
+      linear-gradient(165deg, rgba(196, 165, 116, 0.06), transparent 42%),
+      color-mix(in srgb, var(--color-ink-soft) 78%, transparent);
+  }
+
+  .jp-card-ornament {
+    pointer-events: none;
+    position: absolute;
+    right: -0.35rem;
+    top: -0.35rem;
+    z-index: 2;
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: contain;
+    opacity: 0.42;
+    mix-blend-mode: screen;
+  }
+
+  .jp-place-card.jp-card-active .jp-card-ornament {
+    opacity: 0.72;
+  }
+
+  .jp-travel-leg {
+    position: relative;
+    margin-left: 0.35rem;
+    padding-left: 0.85rem;
+    border-left: 1px dashed color-mix(in srgb, var(--color-sea-bright) 45%, transparent);
+  }
+
+  /* —— 일본풍 달력 / 시각 피커 —— */
+  .jp-cal-trigger,
+  .jp-time-trigger {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+    border-radius: 1px;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--color-ember) 8%, transparent), transparent 50%),
+      color-mix(in srgb, var(--color-ink) 40%, transparent);
+    padding: 0.85rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .jp-cal-trigger:hover,
+  .jp-time-trigger:hover {
+    border-color: color-mix(in srgb, var(--color-gold) 65%, transparent);
+  }
+
+  .jp-time-trigger {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .jp-time-accent {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--color-gold);
+  }
+
+  .jp-cal-popover,
+  .jp-time-popover {
+    position: absolute;
+    z-index: 40;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    width: min(100%, 20.5rem);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 40%, transparent);
+    border-radius: 1px;
+    background:
+      linear-gradient(180deg, rgba(26, 34, 40, 0.98), rgba(15, 18, 20, 0.98)),
+      var(--color-ink);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+
+  .jp-time-popover {
+    width: min(100%, 16.5rem);
+    padding: 0.85rem;
+  }
+
+  .jp-cal-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.85rem 0.9rem;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid rgba(196, 165, 116, 0.25);
+  }
+
+  .jp-cal-nav {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 1px;
+    background: rgba(15, 18, 20, 0.45);
+    color: var(--color-fog);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .jp-cal-nav:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .jp-cal-day {
+    aspect-ratio: 1;
+    border: 1px solid transparent;
+    border-radius: 1px;
+    background: transparent;
+    color: var(--color-fog);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+  }
+
+  .jp-cal-day:hover:not(:disabled) {
+    border-color: rgba(196, 165, 116, 0.45);
+    background: color-mix(in srgb, var(--color-gold) 10%, transparent);
+  }
+
+  .jp-cal-day:disabled {
+    opacity: 0.28;
+    cursor: not-allowed;
+  }
+
+  .jp-cal-day-today {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-sea-bright) 55%, transparent);
+  }
+
+  .jp-cal-day-selected {
+    border-color: color-mix(in srgb, var(--color-ember) 70%, transparent);
+    background: color-mix(in srgb, var(--color-ember) 82%, #1a100e);
+    color: var(--color-fog);
+    font-weight: 600;
+  }
+
+  .jp-time-columns {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.35rem;
+    align-items: stretch;
+  }
+
+  .jp-time-col-label {
+    margin-bottom: 0.35rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    color: var(--color-gold);
+  }
+
+  .jp-time-scroll {
+    display: flex;
+    max-height: 11.5rem;
+    flex-direction: column;
+    gap: 0.2rem;
+    overflow-y: auto;
+    padding-right: 0.15rem;
+    scrollbar-width: thin;
+  }
+
+  .jp-time-divider {
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      color-mix(in srgb, var(--color-gold) 45%, transparent),
+      transparent
+    );
+  }
+
+  .jp-time-option {
+    border: 1px solid transparent;
+    border-radius: 1px;
+    background: transparent;
+    padding: 0.4rem 0.25rem;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--color-mist);
+    cursor: pointer;
+  }
+
+  .jp-time-option:hover {
+    color: var(--color-fog);
+    background: color-mix(in srgb, var(--color-gold) 10%, transparent);
+  }
+
+  .jp-time-option-active {
+    border-color: color-mix(in srgb, var(--color-ember) 55%, transparent);
+    background: color-mix(in srgb, var(--color-ember) 78%, #120c0b);
+    color: var(--color-fog);
+  }
+
+  /* —— 일정 생성 로딩 (사무라이 일격) —— */
+  .jp-loading-root {
+    isolation: isolate;
+  }
+
+  .jp-loading-veil {
+    background:
+      radial-gradient(ellipse at center, rgba(184, 50, 40, 0.18), transparent 55%),
+      rgba(10, 12, 14, 0.82);
+    backdrop-filter: blur(10px);
+  }
+
+  .jp-loading-frame {
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity 0.7s ease,
+      transform 1.2s ease;
+    filter: saturate(0.95) contrast(1.05);
+  }
+
+  .jp-loading-frame-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .jp-loading-slash {
+    pointer-events: none;
+    position: absolute;
+    inset: 18% -10% auto;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(244, 232, 210, 0.15),
+      rgba(184, 50, 40, 0.85),
+      rgba(196, 165, 116, 0.7),
+      transparent
+    );
+    transform: rotate(-18deg);
+    animation: slash-flash 1.4s ease-in-out infinite;
+    box-shadow: 0 0 18px rgba(184, 50, 40, 0.35);
+  }
+
+  .jp-loading-bar {
+    box-shadow: 0 0 12px rgba(196, 165, 116, 0.35);
+  }
+}
+
+@keyframes slash-flash {
+  0%,
+  55% {
+    opacity: 0;
+    transform: rotate(-18deg) translateX(-18%);
+  }
+  62% {
+    opacity: 1;
+    transform: rotate(-18deg) translateX(8%);
+  }
+  78%,
+  100% {
+    opacity: 0;
+    transform: rotate(-18deg) translateX(28%);
+  }
+}

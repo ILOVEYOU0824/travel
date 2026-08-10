@@ -1,0 +1,8 @@
+{
+  "distanceMeters": 4296,
+  "durationSeconds": 3652,
+  "staticDurationSeconds": 3652,
+  "hasPolyline": true,
+  "travelMode": "WALK",
+  "source": "google_routes"
+}

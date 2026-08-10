@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "nanobanana-mcp": {
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "$env:GOOGLE_AI_API_KEY = if ($env:GOOGLE_AI_API_KEY) { $env:GOOGLE_AI_API_KEY } else { $env:GEMINI_API_KEY }; if (-not $env:GOOGLE_AI_API_KEY) { throw 'Set GEMINI_API_KEY or GOOGLE_AI_API_KEY in the environment' }; npx -y @ycse/nanobanana-mcp"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+---
+description: NanoBanana(Gemini)로 UI 시안·히어로 이미지 생성 시 사용 지침
+globs: frontend/**/*.{tsx,css,html}
+alwaysApply: false
+---
+
+# NanoBanana UI
+
+When user asks to beautify UI / make moodboards / hero or marketing visuals:
+
+1. Use **nanobanana-mcp** if available (`set_aspect_ratio` first, then `gemini_generate_image`).
+2. Prefer `flash` for drafts, `pro` for final polish (`set_model`).
+3. Save under `frontend/public/generated/` when assets ship with the app.
+4. Do **not** invent place photos — real Places photos stay from Google API.
+5. Match existing JapanTrip visual language (sea/ink/ember; no purple-default AI look).
+6. If MCP offline, fall back to Cursor `GenerateImage` or CSS-only polish; say which path used.

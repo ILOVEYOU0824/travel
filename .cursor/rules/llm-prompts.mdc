@@ -1,0 +1,41 @@
+---
+description: Claude LLM 시스템 프롬프트·스키마 (선택/intent만)
+globs: backend/**/*.py
+alwaysApply: false
+---
+
+# LLM 프롬프트 규칙
+
+LLM은 장소 생성 금지. 선택·재배열·intent 파싱만.
+
+## 일정 생성 출력 스키마
+
+```json
+{
+  "days": [{
+    "date": "YYYY-MM-DD",
+    "items": [{
+      "place_id": "후보에 있던 값",
+      "order": 1,
+      "time_slot": "morning|lunch|afternoon|dinner|evening",
+      "reason": "한 문장"
+    }]
+  }]
+}
+```
+
+규칙: 후보 `place_id`만 사용 / 하루 3~5곳 / 위경도 군집만(이동시간은 시스템) / must_have 카테고리 필수 포함 / 스키마 외 텍스트 금지.
+
+## Intent 파싱 스키마
+
+```json
+{
+  "intent_type": "add_food|add_sight|remove_item|change_order|change_date|unclear",
+  "category_query": "Places 검색어",
+  "must_have": true,
+  "target_day": "YYYY-MM-DD|null",
+  "raw_text": "원문"
+}
+```
+
+장소 추천 금지. 모호하면 `unclear`.

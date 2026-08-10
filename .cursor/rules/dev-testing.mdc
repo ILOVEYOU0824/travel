@@ -1,0 +1,18 @@
+---
+description: API 스펙 추측 금지, 픽스처 테스트, 배포 분리
+alwaysApply: true
+---
+
+# 개발·테스트 규칙
+
+1. 불확실한 API 스펙(파라미터·필드명)은 추측하지 말 것. 공식 문서 링크를 주석으로 남기거나 사용자에게 확인.
+2. API 연동 함수마다 실제 응답 픽스처를 `tests/fixtures/`에 저장하고, API 키 없이 단위 테스트.
+3. 새 기능 후 실제 API를 한 번 호출해 응답이 타입과 일치하는지 확인한 뒤 다음 단계.
+4. MOCK과 프로덕션 경로를 분리. 배포 경로에 MOCK 데이터가 섞이지 않게.
+5. Google Maps는 API별 과금 → 캐시·요청 수 제한을 개발 중에도 염두.
+
+## 필요 키
+
+- `GOOGLE_MAPS_API_KEY` — Places(New), Directions, Distance Matrix, Maps JS
+- `ANTHROPIC_API_KEY` — Claude
+- `AGODA_CID` — Partner ID (확정 전 TODO)

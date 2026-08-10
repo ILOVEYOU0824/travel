@@ -1,0 +1,20 @@
+{
+  "_comment": "Routes API computeRoutes 응답 형태 MOCK 픽스처. 라이브 호출 후 교체 가능. Docs: https://developers.google.com/maps/documentation/routes/compute-route-over",
+  "routes": [
+    {
+      "distanceMeters": 3200,
+      "duration": "2400s",
+      "staticDuration": "2400s",
+      "polyline": {
+        "encodedPolyline": "MOCK_ENCODED_POLYLINE_DOTONBORI_TO_CASTLE"
+      },
+      "legs": [
+        {
+          "distanceMeters": 3200,
+          "duration": "2400s",
+          "staticDuration": "2400s"
+        }
+      ]
+    }
+  ]
+}

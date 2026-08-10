@@ -1,0 +1,112 @@
+{
+  "_comment": "Places API (New) Text Search 응답 형태 픽스처. 실제 키로 호출 후 이 파일을 교체할 것 (규칙 13). Docs: https://developers.google.com/maps/documentation/places/web-service/text-search",
+  "places": [
+    {
+      "id": "ChIJMOCK_osaka_castle_fixture_001",
+      "types": ["tourist_attraction", "point_of_interest", "establishment"],
+      "primaryType": "tourist_attraction",
+      "formattedAddress": "1-1 Osakajo, Chuo Ward, Osaka, Japan",
+      "location": { "latitude": 34.6873, "longitude": 135.5262 },
+      "rating": 4.5,
+      "userRatingCount": 85000,
+      "googleMapsUri": "https://maps.google.com/?cid=MOCK_FIXTURE_001",
+      "displayName": { "text": "MOCK_오사카성", "languageCode": "ko" },
+      "regularOpeningHours": {
+        "openNow": true,
+        "weekdayDescriptions": [
+          "월요일: 오전 9:00 ~ 오후 5:00",
+          "화요일: 오전 9:00 ~ 오후 5:00",
+          "수요일: 오전 9:00 ~ 오후 5:00",
+          "목요일: 오전 9:00 ~ 오후 5:00",
+          "금요일: 오전 9:00 ~ 오후 5:00",
+          "토요일: 오전 9:00 ~ 오후 5:00",
+          "일요일: 오전 9:00 ~ 오후 5:00"
+        ]
+      },
+      "photos": [
+        {
+          "name": "places/ChIJMOCK_osaka_castle_fixture_001/photos/MOCK_PHOTO_A",
+          "widthPx": 4032,
+          "heightPx": 3024
+        }
+      ]
+    },
+    {
+      "id": "ChIJMOCK_dotonbori_fixture_002",
+      "types": ["tourist_attraction", "point_of_interest", "establishment"],
+      "primaryType": "tourist_attraction",
+      "formattedAddress": "Dotonbori, Chuo Ward, Osaka, Japan",
+      "location": { "latitude": 34.6687, "longitude": 135.5012 },
+      "rating": 4.4,
+      "userRatingCount": 120000,
+      "googleMapsUri": "https://maps.google.com/?cid=MOCK_FIXTURE_002",
+      "displayName": { "text": "MOCK_도톤보리", "languageCode": "ko" },
+      "regularOpeningHours": {
+        "weekdayDescriptions": [
+          "월요일: 24시간 영업",
+          "화요일: 24시간 영업",
+          "수요일: 24시간 영업",
+          "목요일: 24시간 영업",
+          "금요일: 24시간 영업",
+          "토요일: 24시간 영업",
+          "일요일: 24시간 영업"
+        ]
+      },
+      "photos": []
+    },
+    {
+      "id": "ChIJMOCK_ramen_fixture_003",
+      "types": ["ramen_restaurant", "restaurant", "food", "point_of_interest", "establishment"],
+      "primaryType": "ramen_restaurant",
+      "formattedAddress": "MOCK address, Namba, Osaka, Japan",
+      "location": { "latitude": 34.6652, "longitude": 135.5019 },
+      "rating": 4.3,
+      "userRatingCount": 2100,
+      "googleMapsUri": "https://maps.google.com/?cid=MOCK_FIXTURE_003",
+      "displayName": { "text": "MOCK_라멘 테스트점", "languageCode": "ko" },
+      "regularOpeningHours": {
+        "openNow": false,
+        "weekdayDescriptions": [
+          "월요일: 오전 11:00 ~ 오후 10:00",
+          "화요일: 오전 11:00 ~ 오후 10:00",
+          "수요일: 휴무일",
+          "목요일: 오전 11:00 ~ 오후 10:00",
+          "금요일: 오전 11:00 ~ 오후 10:00",
+          "토요일: 오전 11:00 ~ 오후 10:00",
+          "일요일: 오전 11:00 ~ 오후 10:00"
+        ]
+      },
+      "photos": [
+        {
+          "name": "places/ChIJMOCK_ramen_fixture_003/photos/MOCK_PHOTO_B",
+          "widthPx": 1920,
+          "heightPx": 1080
+        }
+      ]
+    },
+    {
+      "id": "ChIJMOCK_cafe_fixture_004",
+      "types": ["cafe", "food", "point_of_interest", "establishment"],
+      "primaryType": "cafe",
+      "formattedAddress": "MOCK address, Umeda, Osaka, Japan",
+      "location": { "latitude": 34.7055, "longitude": 135.4983 },
+      "rating": 4.2,
+      "userRatingCount": 890,
+      "googleMapsUri": "https://maps.google.com/?cid=MOCK_FIXTURE_004",
+      "displayName": { "text": "MOCK_카페 테스트점", "languageCode": "ko" },
+      "photos": []
+    },
+    {
+      "id": "ChIJMOCK_hotel_fixture_005",
+      "types": ["lodging", "point_of_interest", "establishment"],
+      "primaryType": "lodging",
+      "formattedAddress": "MOCK address, Namba, Osaka, Japan",
+      "location": { "latitude": 34.6638, "longitude": 135.5015 },
+      "rating": 4.1,
+      "userRatingCount": 3200,
+      "googleMapsUri": "https://maps.google.com/?cid=MOCK_FIXTURE_005",
+      "displayName": { "text": "MOCK_호텔 테스트", "languageCode": "ko" },
+      "photos": []
+    }
+  ]
+}

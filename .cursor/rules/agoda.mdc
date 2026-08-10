@@ -1,0 +1,12 @@
+---
+description: Agoda 연동 — MVP에서는 딥링크 미구현, 사용자 직접 예약
+globs: "**/*agoda*"
+alwaysApply: false
+---
+
+# Agoda / 숙소 예약
+
+MVP 결정: Affiliate 딥링크·임의 URL 생성하지 않는다.
+숙소는 Places API lodging 후보로만 일정에 넣을 수 있고, 예약은 사용자가 Agoda 등에서 직접 한다.
+
+나중에 Partner `cid`와 공식 URL 스펙이 확정되면 그때 연동. 확정 전 `AGODA_LINK_FORMAT_TODO`만 허용.

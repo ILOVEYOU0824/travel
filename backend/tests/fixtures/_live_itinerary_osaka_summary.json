@@ -1,0 +1,101 @@
+{
+  "llm_source": "claude",
+  "candidates_count": 32,
+  "validation": {
+    "removed_place_ids": [],
+    "removed_items_count": 0,
+    "errors": []
+  },
+  "days": [
+    {
+      "date": "2026-09-10",
+      "items": [
+        {
+          "place_id": "ChIJn3_C2xDnAGAR5CaqbIL_nmo",
+          "name": "야키니꾸 지다이야",
+          "category": "restaurant",
+          "time_slot": "morning",
+          "ai_description": "오사카 여행 첫날 아침, 도톤보리 인근에서 야키니쿠로 시작",
+          "rating": 4.7
+        },
+        {
+          "place_id": "ChIJ_fmKgRPnAGARkKWLtCYTu7g",
+          "name": "도톤보리",
+          "category": "attraction",
+          "time_slot": "lunch",
+          "ai_description": "오사카의 상징적인 관광지 도톤보리 탐방",
+          "rating": 4.4
+        },
+        {
+          "place_id": "ChIJK7TL6RTnAGARYiifaSOuOFM",
+          "name": "이치란 도톤보리점 별관",
+          "category": "restaurant",
+          "time_slot": "lunch",
+          "ai_description": "must_have 라멘 조건 충족 - 도톤보리 인근 이치란 라멘",
+          "rating": 4.3
+        },
+        {
+          "place_id": "ChIJJ-oVXvHnAGARiWcwafO8H-8",
+          "name": "릴로커피 킷사",
+          "category": "cafe",
+          "time_slot": "afternoon",
+          "ai_description": "도톤보리에서 가까운 릴로커피 킷사에서 휴식",
+          "rating": 4.5
+        },
+        {
+          "place_id": "ChIJ_0Lgd2DnAGARV0X03lbPy-U",
+          "name": "쓰텐카쿠 전망대",
+          "category": "attraction",
+          "time_slot": "evening",
+          "ai_description": "저녁 시간 쓰텐카쿠 전망대에서 오사카 야경 감상",
+          "rating": 4.1
+        }
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "items": [
+        {
+          "place_id": "ChIJfTm52RfnAGARxwXw74qw_tk",
+          "name": "모헤지 우메다 루쿠아점",
+          "category": "restaurant",
+          "time_slot": "morning",
+          "ai_description": "우메다 지역에서 아침 식사 - 모헤지 우메다 루쿠아점",
+          "rating": 4.9
+        },
+        {
+          "place_id": "ChIJbyd0kIjmAGAR_crecCbjwlc",
+          "name": "우메다 스카이빌딩",
+          "category": "attraction",
+          "time_slot": "lunch",
+          "ai_description": "우메다 스카이빌딩 방문 및 전망 감상",
+          "rating": 4.4
+        },
+        {
+          "place_id": "ChIJ_TooXM3gAGARQR6hXH3QAQ8",
+          "name": "오사카 성",
+          "category": "attraction",
+          "time_slot": "afternoon",
+          "ai_description": "오사카의 대표 관광지 오사카 성 탐방",
+          "rating": 4.4
+        },
+        {
+          "place_id": "ChIJoccQsXvnAGARJe2mt1IjdTU",
+          "name": "Step Coffee Osaka",
+          "category": "cafe",
+          "time_slot": "afternoon",
+          "ai_description": "오사카 성 인근 Step Coffee에서 휴식",
+          "rating": 4.9
+        },
+        {
+          "place_id": "ChIJsYm_2qTnAGARUw2JSPkAH_Y",
+          "name": "무겐라멘 센니치마에점",
+          "category": "restaurant",
+          "time_slot": "dinner",
+          "ai_description": "여행 마지막 저녁, must_have 라멘 재방문 - 무겐라멘 센니치마에점",
+          "rating": 4.7
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+---
+description: JapanTrip AI 기술 스택·아키텍처·개발 순서
+alwaysApply: true
+---
+
+# 스택 & 아키텍처
+
+서비스: JapanTrip AI — 날짜/지역 입력 → API 기반 일정 → 자연어 재조정.
+
+| 영역 | 스택 |
+|------|------|
+| FE | React + TypeScript, Zustand, TailwindCSS |
+| BE | Python FastAPI, Pydantic |
+| DB | PostgreSQL (+ PostGIS 선택) |
+| Cache | Redis |
+| Maps | Google Places(New), Directions, Distance Matrix, Maps JS |
+| LLM | Claude API — Tool Use / Structured Output만 |
+| 숙소 | Agoda Affiliate 딥링크 (옵션 A, MVP) |
+
+## 파이프라인 (경계 강제)
+
+1. 후보 수집 — Places API만 (AI 미개입)
+2. 후보 JSON 20~50개
+3. LLM — place_id 선택/일자 배정만
+4. 서버 검증 — place_id ∈ 후보
+5. 경로 — Directions/Distance Matrix
+6. 최종 일정 JSON → FE 지도
+
+## 개발 순서
+
+1. Places 연동 → 2. Directions/Matrix → 3. LLM+검증 → 4. FE 지도/일정 → 5. 리플래닝 → 6. Agoda → 7. Redis/에러/인증
+
+단계마다 실제 API 응답 구조를 타입과 대조한 뒤 다음 단계로.

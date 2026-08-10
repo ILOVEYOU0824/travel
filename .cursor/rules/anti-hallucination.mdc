@@ -1,0 +1,31 @@
+---
+description: 환각 방지 — 장소 데이터는 Google API만, LLM은 선택/정렬만
+alwaysApply: true
+---
+
+# JapanTrip AI — 환각 방지 (최우선)
+
+핵심: AI는 절대 장소 데이터를 스스로 생성하지 않는다.
+
+## 데이터 소스
+
+1. 관광지/맛집/카페/숙소 정보는 Google Places API 응답만 사용. 이름·주소·좌표·평점·영업시간·리뷰 수를 하드코딩하거나 임의 생성 금지.
+2. 목업은 `MOCK_` 접두사 + 실제 경로와 분리 (`mock_places.py` vs `places_service.py`).
+3. LLM이 좌표/주소/영업시간을 반환해도 신뢰하지 말 것. `place_id`로 Places API 재검증 후 덮어쓴다.
+
+## LLM
+
+4. Structured Output(JSON 스키마) 필수. 자유 텍스트 파싱 금지. Pydantic 스키마 불일치 시 재시도.
+5. 후보 리스트를 프롬프트에 넣고 "리스트 안에서만 선택" 지시. 리스트에 없는 `place_id`/이름은 서버에서 필터링.
+6. 이동시간·거리는 Directions/Distance Matrix API만. LLM 추정 금지.
+7. 모든 LLM 응답은 `validate_itinerary_response` 등 검증 통과 후만 사용. 실패 시 재시도/에러.
+
+## 리플래닝
+
+8. 자연어 → intent 파싱 → Places 검색 → 후보 중 삽입 → Directions 재계산. 장소를 LLM이 만들지 말 것.
+9. 검색 실패 시 "찾을 수 없습니다" 반환. 임의 생성 금지.
+
+## UI
+
+10. 카드 필드는 API 원본 1:1 매핑. AI 문구는 `ai_description` 등 별도 필드 + 출처 표시.
+11. 영업시간은 "방문 전 공식 출처에서 재확인" 고지 필수.

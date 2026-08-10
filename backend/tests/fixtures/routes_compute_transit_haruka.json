@@ -1,0 +1,53 @@
+{
+  "_comment": "Routes API TRANSIT + transitDetails 형태. Docs: https://developers.google.com/maps/documentation/routes/transit-route",
+  "routes": [
+    {
+      "distanceMeters": 52000,
+      "duration": "4800s",
+      "staticDuration": "4800s",
+      "polyline": {
+        "encodedPolyline": "MOCK_ENCODED_POLYLINE_KIX_TO_OSAKA"
+      },
+      "legs": [
+        {
+          "distanceMeters": 52000,
+          "duration": "4800s",
+          "staticDuration": "4800s",
+          "steps": [
+            {
+              "travelMode": "WALK",
+              "staticDuration": "300s"
+            },
+            {
+              "travelMode": "TRANSIT",
+              "transitDetails": {
+                "transitLine": {
+                  "name": "Haruka",
+                  "nameShort": "Haruka",
+                  "agencies": [{ "name": "JR West" }],
+                  "vehicle": {
+                    "type": "COMMUTER_TRAIN",
+                    "name": { "text": "Train", "languageCode": "en" }
+                  }
+                }
+              }
+            },
+            {
+              "travelMode": "TRANSIT",
+              "transitDetails": {
+                "transitLine": {
+                  "name": "Midosuji Line",
+                  "nameShort": "M",
+                  "vehicle": {
+                    "type": "SUBWAY",
+                    "name": { "text": "Subway", "languageCode": "en" }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
