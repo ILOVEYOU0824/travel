@@ -11,7 +11,8 @@ venv/
 node_modules/
 dist/
 *.egg-info/
-data/
+# 일정 파일 폴백만 제외 (frontend/src/data 는 커밋)
+/data/
 backend/data/
 frontend/public/generated/*
 !frontend/public/generated/.gitkeep
