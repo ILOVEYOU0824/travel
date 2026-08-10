@@ -128,14 +128,14 @@ export function ItineraryMap({ day }: { day: ItineraryDay | undefined }) {
     : { lat: 34.6937, lng: 135.5023 }
 
   return (
-    <div className="anim-map h-full min-h-[320px] overflow-hidden border border-white/10">
+    <div className="anim-map h-full min-h-0 overflow-hidden border border-white/10">
       <APIProvider apiKey={MAPS_KEY} language="ko" region="JP">
         <Map
           defaultCenter={center}
           defaultZoom={13}
           gestureHandling="greedy"
           disableDefaultUI={false}
-          style={{ width: '100%', height: '100%', minHeight: 320 }}
+          style={{ width: '100%', height: '100%' }}
           colorScheme="DARK"
         >
           <FitBounds day={day} />

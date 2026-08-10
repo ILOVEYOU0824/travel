@@ -26,7 +26,6 @@ export function ResultShell() {
   const selectedDayIndex = usePlannerStore((s) => s.selectedDayIndex)
   const reset = usePlannerStore((s) => s.reset)
   const [tab, setTab] = useState<ResultTab>('itinerary')
-  const [mapOpen, setMapOpen] = useState(true)
 
   if (!result) return null
 
@@ -100,57 +99,30 @@ export function ResultShell() {
             ))}
           </div>
 
-          {/* 일정: 텍스트가 주(넓게) · 지도는 좁은 미리보기 */}
+          {/* 일정: 텍스트만 전체 폭 — 지도는 「지도」 탭 (길쭉한 옆 지도 제거) */}
           {tab === 'itinerary' ? (
-            <div className="relative grid min-h-0 flex-1 lg:grid-cols-[minmax(0,1fr)_auto]">
-              <section className="relative min-h-0 overflow-y-auto overscroll-contain p-3 lg:p-4">
-                <img
-                  src="/generated/ui-timeline-panel.png"
-                  alt=""
-                  className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.07]"
-                />
-                <div className="relative mx-auto max-w-3xl">
-                  <DayTimeline days={result.days} selectedDayIndex={selectedDayIndex} />
+            <section className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-5">
+              <img
+                src="/generated/ui-timeline-panel.png"
+                alt=""
+                className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.07]"
+              />
+              <div className="relative mx-auto max-w-3xl">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-xs text-mist/55">
+                    이동·노선은 아래 텍스트 요약을 보세요. 지도가 필요하면 「지도」 탭으로.
+                  </p>
+                  <button
+                    type="button"
+                    className="jp-btn jp-btn-secondary text-xs"
+                    onClick={() => setTab('map')}
+                  >
+                    지도 보기
+                  </button>
                 </div>
-              </section>
-              {mapOpen ? (
-                <aside className="hidden w-[min(28vw,300px)] min-h-0 flex-col border-l border-white/10 lg:flex">
-                  <div className="flex shrink-0 items-center justify-between gap-2 border-b border-white/10 px-2 py-1.5">
-                    <p className="text-[11px] tracking-wide text-mist/55">지도 미리보기</p>
-                    <div className="flex gap-1">
-                      <button
-                        type="button"
-                        className="jp-btn jp-btn-ghost px-2 py-1 text-[11px]"
-                        onClick={() => setTab('map')}
-                      >
-                        크게
-                      </button>
-                      <button
-                        type="button"
-                        className="jp-btn jp-btn-ghost px-2 py-1 text-[11px]"
-                        onClick={() => setMapOpen(false)}
-                      >
-                        숨기기
-                      </button>
-                    </div>
-                  </div>
-                  <div className="min-h-0 flex-1 overflow-hidden">
-                    <ItineraryMap day={day} />
-                  </div>
-                </aside>
-              ) : (
-                <button
-                  type="button"
-                  className="absolute bottom-4 right-4 z-20 hidden jp-btn jp-btn-secondary text-xs shadow-lg lg:inline-flex"
-                  onClick={() => setMapOpen(true)}
-                >
-                  지도 미리보기
-                </button>
-              )}
-              <p className="col-span-full border-t border-white/10 px-3 py-2 text-[11px] text-mist/50 lg:hidden">
-                이동은 위 텍스트 요약을 보고, 지도는 「지도」 탭에서 크게 볼 수 있어요.
-              </p>
-            </div>
+                <DayTimeline days={result.days} selectedDayIndex={selectedDayIndex} />
+              </div>
+            </section>
           ) : null}
 
           {tab === 'map' ? (
