@@ -121,7 +121,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   ...createEditDayActions(set, get),
 
   goHome: () => {
-    set({ screen: 'home' })
+    document.title = 'JapanTrip'
+    set({
+      screen: 'home',
+      resultTab: 'itinerary',
+      jobToast: null,
+    })
   },
 
   showResult: (tab) => {
