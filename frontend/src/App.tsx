@@ -81,14 +81,26 @@ export default function App() {
               </div>
             </header>
 
-            <div className="relative z-10 mt-auto w-full px-6 pb-16 sm:px-10 sm:pb-20">
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center px-6 pb-16 text-center sm:px-10 sm:pb-20">
+              <div className="max-w-xl">
+                <p className="font-display text-xs tracking-[0.38em] text-gold/90">
+                  旅 · 실제 지도로 이어 쓰는 일정
+                </p>
+                <h1 className="mt-3 font-display text-3xl leading-[1.15] text-fog sm:text-4xl">
+                  설렘이 도착하는 순간,
+                </h1>
+                <p className="mt-2 text-sm leading-relaxed text-mist/70 sm:text-base">
+                  Google 지도 속 장소만 골라 하루를 자연스럽게 연결합니다.
+                </p>
+              </div>
+
+              <div className="mt-10 flex flex-wrap justify-center gap-3">
                 {!authReady ? (
                   <span className="text-sm text-mist/55">확인 중…</span>
                 ) : !authUser ? (
                   <button
                     type="button"
-                    className="jp-btn jp-btn-kakao px-7 py-3.5 text-sm"
+                    className="jp-btn jp-btn-kakao px-10 py-4 text-base"
                     onClick={() => void loginWithKakao()}
                   >
                     <KakaoMark />
@@ -97,7 +109,7 @@ export default function App() {
                 ) : (
                   <button
                     type="button"
-                    className="jp-btn jp-btn-primary px-7 py-3.5 text-sm"
+                    className="jp-btn jp-btn-primary px-10 py-4 text-base"
                     onClick={() =>
                       document.getElementById('planner')?.scrollIntoView({ behavior: 'smooth' })
                     }
@@ -105,11 +117,16 @@ export default function App() {
                     일정 짜기
                   </button>
                 )}
-                <a href="#saved" className="jp-btn jp-btn-secondary px-7 py-3.5 text-sm">
+                <a href="#saved" className="jp-btn jp-btn-secondary px-10 py-4 text-base">
                   저장된 일정 보기
                 </a>
               </div>
-              {authError ? <p className="mt-3 text-xs text-ember">{authError}</p> : null}
+
+              {authError ? (
+                <p className="mt-4 text-xs text-ember" role="alert">
+                  {authError}
+                </p>
+              ) : null}
             </div>
           </section>
 
