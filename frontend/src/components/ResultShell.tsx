@@ -1,15 +1,18 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { budgetTierLabel } from '../lib/format'
 import { usePlannerStore } from '../store/plannerStore'
 import { AuthBar } from './AuthBar'
 import { DayTimeline } from './DayTimeline'
-import { ItineraryMap } from './ItineraryMap'
 import { ReplanBar } from './ReplanBar'
 import { SaveBar } from './SaveBar'
 import { SearchHintsBar } from './SearchHintsBar'
 import { PrepChecklist } from './PrepChecklist'
 import { TripControlsBar } from './TripControlsBar'
 import { TripInsightsBar } from './TripInsightsBar'
+
+const ItineraryMap = lazy(() =>
+  import('./ItineraryMap').then((m) => ({ default: m.ItineraryMap })),
+)
 
 type ResultTab = 'itinerary' | 'map' | 'prepare' | 'edit' | 'info'
 
@@ -141,7 +144,15 @@ export function ResultShell() {
                 </button>
               </div>
               <div className="min-h-0 flex-1">
-                <ItineraryMap day={day} />
+                <Suspense
+                  fallback={
+                    <div className="flex h-full min-h-[240px] items-center justify-center bg-ink-soft text-sm text-mist/60">
+                      지도 불러오는 중…
+                    </div>
+                  }
+                >
+                  <ItineraryMap day={day} />
+                </Suspense>
               </div>
             </section>
           ) : null}

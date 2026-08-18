@@ -18,3 +18,7 @@ backend/data/
 .DS_Store
 Thumbs.db
 *.log
+# 로컬 참고 이미지 (UI는 데이터로 반영)
+/준비물.jpg
+/*.jpg
+/*.jpeg

@@ -1,11 +1,14 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { AuthBar } from './components/AuthBar'
 import { LoadingOverlay } from './components/LoadingOverlay'
 import { PlannerForm } from './components/PlannerForm'
-import { ResultShell } from './components/ResultShell'
 import { TripsPanel } from './components/TripsPanel'
 import { useAuthStore } from './store/authStore'
 import { usePlannerStore } from './store/plannerStore'
+
+const ResultShell = lazy(() =>
+  import('./components/ResultShell').then((m) => ({ default: m.ResultShell })),
+)
 
 export default function App() {
   const result = usePlannerStore((s) => s.result)
@@ -67,10 +70,13 @@ export default function App() {
                 </div>
               </div>
               <h1 className="anim-rise mt-6 max-w-xl font-display text-4xl leading-[1.12] text-fog sm:text-5xl">
-                고요한 골목부터
+                설렘이 도착하는 순간부터
                 <br />
-                오늘의 동선까지
+                그리움이 남는 밤까지
               </h1>
+              <p className="anim-rise mt-3 max-w-md font-display text-lg tracking-wide text-gold/90 sm:text-xl">
+                지도로 이어 쓰는 일본 여행
+              </p>
               <p className="anim-rise mt-4 max-w-md text-sm leading-relaxed text-mist/88 sm:text-base">
                 Google 지도에 있는 장소만 골라 일정을 만듭니다. 없는 맛집·관광지는 만들지 않습니다.
               </p>
@@ -133,7 +139,15 @@ export default function App() {
           </section>
         </div>
       ) : (
-        <ResultShell />
+        <Suspense
+          fallback={
+            <div className="flex h-[100svh] items-center justify-center bg-ink text-sm text-mist/60">
+              일정 화면 불러오는 중…
+            </div>
+          }
+        >
+          <ResultShell />
+        </Suspense>
       )}
     </>
   )

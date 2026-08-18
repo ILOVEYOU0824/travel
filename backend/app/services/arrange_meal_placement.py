@@ -5,26 +5,19 @@
 
 from __future__ import annotations
 
-import math
 from typing import Iterable
 
 from app.schemas.itinerary import LlmItineraryDay, LlmItineraryItem, LlmItineraryResponse, TimeSlot
 from app.schemas.place import Place, PlaceCategory
 from app.services.flight_windows import FlightWindows, allowed_slots_for_day
+from app.services.food_proximity import haversine_m
 
 _MEAL_SLOTS = (TimeSlot.lunch, TimeSlot.dinner)
 _SIGHT_SLOTS = (TimeSlot.morning, TimeSlot.afternoon, TimeSlot.evening)
 
 
 def _haversine_m(a: tuple[float, float], b: tuple[float, float]) -> float:
-    lat1, lng1 = a
-    lat2, lng2 = b
-    r = 6371000.0
-    p1, p2 = math.radians(lat1), math.radians(lat2)
-    dphi = math.radians(lat2 - lat1)
-    dlmb = math.radians(lng2 - lng1)
-    h = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
-    return 2 * r * math.asin(min(1.0, math.sqrt(h)))
+    return haversine_m(a[0], a[1], b[0], b[1])
 
 
 def _coords(place: Place) -> tuple[float, float]:

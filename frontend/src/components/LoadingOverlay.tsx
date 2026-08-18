@@ -84,10 +84,11 @@ export function LoadingOverlay() {
       <div aria-hidden className="jp-loading-veil absolute inset-0" />
       <div className="anim-rise relative z-10 w-full max-w-lg overflow-hidden border border-gold/35 bg-ink/92 shadow-[0_28px_70px_rgba(0,0,0,0.6)]">
         <div className="relative aspect-[5/4] w-full overflow-hidden bg-ink">
-          {FRAMES.map((src, i) => (
+          {/* 현재·다음 프레임만 로드 (9장 동시 로드 방지) */}
+          {[frame, (frame + 1) % FRAMES.length].map((i) => (
             <img
-              key={src}
-              src={src}
+              key={`loading-${i}`}
+              src={FRAMES[i]}
               alt=""
               className={`jp-loading-frame absolute inset-0 h-full w-full object-cover ${
                 i === frame ? 'jp-loading-frame-active' : ''

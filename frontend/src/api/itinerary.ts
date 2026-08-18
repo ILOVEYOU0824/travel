@@ -254,22 +254,6 @@ export async function fetchRainAdvice(payload: {
   return (await res.json()) as RainAdvice
 }
 
-export async function fetchAffiliateStatus(): Promise<{
-  search_wrapping: boolean
-  has_home_link: boolean
-  has_kkday_link?: boolean
-  mode: string
-}> {
-  const res = await fetch(`${API_BASE}/api/v1/meta/affiliate`)
-  if (!res.ok) throw new Error(await readError(res, `어필리에이트 상태 실패 (${res.status})`))
-  return (await res.json()) as {
-    search_wrapping: boolean
-    has_home_link: boolean
-    has_kkday_link?: boolean
-    mode: string
-  }
-}
-
 export async function saveTrip(payload: {
   title: string
   itinerary: ItineraryDay[]
