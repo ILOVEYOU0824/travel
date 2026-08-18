@@ -69,7 +69,11 @@ export default function App() {
               </div>
               <div className="flex items-center gap-2">
                 {result ? (
-                  <button type="button" onClick={showResult} className="jp-btn jp-btn-secondary text-xs">
+                  <button
+                    type="button"
+                    onClick={() => showResult()}
+                    className="jp-btn jp-btn-secondary text-xs"
+                  >
                     현재 일정
                   </button>
                 ) : null}
