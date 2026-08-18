@@ -28,6 +28,7 @@ export function TripsPanel() {
   const openTrip = usePlannerStore((s) => s.openTrip)
   const user = useAuthStore((s) => s.user)
   const authReady = useAuthStore((s) => s.ready)
+  const replanning = usePlannerStore((s) => s.replanning)
   const [trips, setTrips] = useState<TripSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -87,7 +88,11 @@ export function TripsPanel() {
   }
 
   return (
-    <ul className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
+      {replanning ? (
+        <p className="text-xs text-gold/80">일정 수정이 끝난 뒤 다른 저장본을 열 수 있습니다.</p>
+      ) : null}
+      <ul className="flex flex-col gap-2">
       {trips.map((t) => (
         <li
           key={t.id}
@@ -95,8 +100,12 @@ export function TripsPanel() {
         >
           <button
             type="button"
-            onClick={() => void openTrip(t.id)}
-            className="min-w-0 flex-1 text-left text-sm text-fog hover:text-gold"
+            disabled={replanning}
+            onClick={() => {
+              if (replanning) return
+              void openTrip(t.id)
+            }}
+            className="min-w-0 flex-1 text-left text-sm text-fog hover:text-gold disabled:opacity-50"
           >
             <span className="block truncate font-medium">{t.title}</span>
             <span className="block text-[11px] text-mist/45">
@@ -112,6 +121,7 @@ export function TripsPanel() {
           </button>
         </li>
       ))}
-    </ul>
+      </ul>
+    </div>
   )
 }

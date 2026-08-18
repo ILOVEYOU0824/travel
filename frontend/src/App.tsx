@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { AuthBar } from './components/AuthBar'
+import { JobChrome } from './components/JobChrome'
 import { LoadingOverlay } from './components/LoadingOverlay'
 import { PlannerForm } from './components/PlannerForm'
 import { TripsPanel } from './components/TripsPanel'
@@ -10,14 +11,28 @@ const ResultShell = lazy(() =>
   import('./components/ResultShell').then((m) => ({ default: m.ResultShell })),
 )
 
+function KakaoMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M12 4C6.7 4 2.4 7.24 2.4 11.22c0 2.52 1.66 4.74 4.18 6.05-.14.5-.88 3.14-.91 3.35 0 0-.18.15.08.28.22.11.48-.01.48-.01 1.9-1.3 2.74-1.87 3.15-2.16.85.12 1.72.19 2.62.19 5.3 0 9.6-3.24 9.6-7.22S17.3 4 12 4z"
+      />
+    </svg>
+  )
+}
+
 export default function App() {
+  const screen = usePlannerStore((s) => s.screen)
   const result = usePlannerStore((s) => s.result)
   const loading = usePlannerStore((s) => s.loading)
   const error = usePlannerStore((s) => s.error)
   const openTrip = usePlannerStore((s) => s.openTrip)
+  const showResult = usePlannerStore((s) => s.showResult)
   const authInit = useAuthStore((s) => s.init)
   const authReady = useAuthStore((s) => s.ready)
   const authUser = useAuthStore((s) => s.user)
+  const authError = useAuthStore((s) => s.error)
   const loginWithKakao = useAuthStore((s) => s.loginWithKakao)
 
   useEffect(() => authInit(), [authInit])
@@ -27,14 +42,16 @@ export default function App() {
     if (id) void openTrip(id)
   }, [openTrip])
 
+  const showPlan = screen === 'result' && result
+
   return (
     <>
       <LoadingOverlay />
+      <JobChrome />
 
-      {!result ? (
+      {!showPlan ? (
         <div className="washi-bg min-h-screen text-fog">
-          {/* 1뷰포트: 브랜드 + 헤드라인 + CTA + 풀블리드 히어로만 */}
-          <section className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden">
+          <section className="relative flex min-h-[100svh] flex-col overflow-hidden">
             <img
               src="/generated/hero-alley-dusk.png"
               alt=""
@@ -42,77 +59,59 @@ export default function App() {
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/25"
-            />
-            <div
-              aria-hidden
-              className="anim-pulse pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ember/20 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-ink/20"
             />
 
-            {authUser ? (
-              <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
+            <header className="relative z-20 flex items-center justify-between gap-3 px-4 py-4 sm:px-6">
+              <div className="flex items-center gap-2.5">
+                <img src="/generated/seal-tabi.png" alt="" className="h-8 w-8 object-contain" />
+                <p className="font-display text-sm tracking-[0.28em] text-fog">JapanTrip</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {result ? (
+                  <button type="button" onClick={showResult} className="jp-btn jp-btn-secondary text-xs">
+                    현재 일정
+                  </button>
+                ) : null}
                 <AuthBar />
               </div>
-            ) : null}
+            </header>
 
-            <div className="relative z-10 mx-auto w-full max-w-5xl px-6 pb-16 pt-28 sm:pb-20">
-              <div className="anim-rise flex items-end gap-4">
-                <img
-                  src="/generated/seal-tabi.png"
-                  alt=""
-                  className="anim-seal jp-brand-mark"
-                />
-                <div>
-                  <p className="font-display text-sm tracking-[0.38em] text-gold">JapanTrip</p>
-                  <p className="mt-1 font-display text-xs tracking-[0.3em] text-fog/60">
-                    旅 · 실제 지도로 짜는 일정
-                  </p>
-                </div>
-              </div>
-              <h1 className="anim-rise mt-6 max-w-xl font-display text-4xl leading-[1.12] text-fog sm:text-5xl">
-                설렘이 도착하는 순간부터
-                <br />
-                그리움이 남는 밤까지
-              </h1>
-              <p className="anim-rise mt-3 max-w-md font-display text-lg tracking-wide text-gold/90 sm:text-xl">
-                지도로 이어 쓰는 일본 여행
-              </p>
-              <p className="anim-rise mt-4 max-w-md text-sm leading-relaxed text-mist/88 sm:text-base">
-                Google 지도에 있는 장소만 골라 일정을 만듭니다. 없는 맛집·관광지는 만들지 않습니다.
-              </p>
-              <div className="anim-rise-delay mt-9 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  className={
-                    authReady && !authUser
-                      ? 'jp-btn jp-btn-kakao px-8 py-3.5 text-sm'
-                      : 'jp-btn jp-btn-primary px-8 py-3.5 text-sm'
-                  }
-                  onClick={() => {
-                    if (authReady && !authUser) {
-                      void loginWithKakao()
-                      return
+            <div className="relative z-10 mt-auto w-full px-6 pb-16 sm:px-10 sm:pb-20">
+              <div className="flex flex-wrap items-center gap-3">
+                {!authReady ? (
+                  <span className="text-sm text-mist/55">확인 중…</span>
+                ) : !authUser ? (
+                  <button
+                    type="button"
+                    className="jp-btn jp-btn-kakao px-7 py-3.5 text-sm"
+                    onClick={() => void loginWithKakao()}
+                  >
+                    <KakaoMark />
+                    카카오톡 로그인
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="jp-btn jp-btn-primary px-7 py-3.5 text-sm"
+                    onClick={() =>
+                      document.getElementById('planner')?.scrollIntoView({ behavior: 'smooth' })
                     }
-                    document.getElementById('planner')?.scrollIntoView({ behavior: 'smooth' })
-                  }}
-                >
-                  {authReady && !authUser ? '카카오로 로그인' : '일정 짜기'}
-                </button>
-                <a href="#saved" className="jp-btn jp-btn-secondary text-sm">
-                  저장한 일정
+                  >
+                    일정 짜기
+                  </button>
+                )}
+                <a href="#saved" className="jp-btn jp-btn-secondary px-7 py-3.5 text-sm">
+                  저장된 일정 보기
                 </a>
               </div>
+              {authError ? <p className="mt-3 text-xs text-ember">{authError}</p> : null}
             </div>
           </section>
 
-          {/* 폼은 히어로 아래 */}
-          <section id="planner" className="relative border-t border-white/10 px-6 py-14">
+          <section id="planner" className="relative scroll-mt-6 border-t border-white/10 px-6 py-14">
             <div className="mx-auto max-w-xl">
-              <div className="jp-section-rule mb-8" />
-              <h2 className="anim-rise font-display text-2xl tracking-wide text-fog">여행 정보</h2>
-              <p className="anim-rise mt-2 text-sm text-mist/65">
-                카카오 로그인 후 날짜·지역·경비를 넣으면 Places 후보 안에서만 고릅니다.
-              </p>
+              <h2 className="font-display text-2xl tracking-wide text-fog">여행 정보</h2>
               <div className="mt-8">
                 <PlannerForm />
               </div>
@@ -125,12 +124,8 @@ export default function App() {
                 </p>
               ) : null}
 
-              <div id="saved" className="mt-12 border-t border-white/10 pt-8">
-                <div className="jp-section-rule mb-6" />
+              <div id="saved" className="mt-12 scroll-mt-6 border-t border-white/10 pt-8">
                 <h3 className="font-display text-lg tracking-wide text-fog">저장된 일정</h3>
-                <p className="mt-1 text-xs text-mist/55">
-                  로그인하면 내 계정 일정이, 비로그인이면 이 기기에서 연 공유 링크가 보입니다.
-                </p>
                 <div className="mt-4">
                   <TripsPanel />
                 </div>

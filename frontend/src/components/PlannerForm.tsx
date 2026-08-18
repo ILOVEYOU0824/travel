@@ -226,6 +226,8 @@ export function PlannerForm() {
   const returnDepartureJst = usePlannerStore((s) => s.returnDepartureJst)
   const arrivalAirportQuery = usePlannerStore((s) => s.arrivalAirportQuery)
   const loading = usePlannerStore((s) => s.loading)
+  const replanning = usePlannerStore((s) => s.replanning)
+  const result = usePlannerStore((s) => s.result)
   const error = usePlannerStore((s) => s.error)
   const setField = usePlannerStore((s) => s.setField)
   const setDateRange = usePlannerStore((s) => s.setDateRange)
@@ -278,7 +280,7 @@ export function PlannerForm() {
             onClick={() => void loginWithKakao()}
             className="jp-btn jp-btn-kakao px-6 py-3 text-sm"
           >
-            카카오로 로그인하고 일정 짜기
+            카카오톡 로그인
           </button>
         )}
       </div>
@@ -290,6 +292,8 @@ export function PlannerForm() {
       className="anim-rise-delay flex w-full max-w-xl flex-col gap-6"
       onSubmit={(e) => {
         e.preventDefault()
+        if (replanning) return
+        if (result && !window.confirm('지금 보고 있던 일정을 새 일정으로 바꿀까요?')) return
         void generate()
       }}
     >
@@ -506,8 +510,12 @@ export function PlannerForm() {
         <p className="border border-ember/40 bg-ember/10 px-3 py-2 text-sm text-ember">{error}</p>
       ) : null}
 
-      <button type="submit" disabled={loading} className="jp-btn jp-btn-primary mt-1 w-full py-3.5 text-base">
-        {loading ? '일정 구성 중…' : '일정 만들기'}
+      <button
+        type="submit"
+        disabled={loading || replanning}
+        className="jp-btn jp-btn-primary mt-1 w-full py-3.5 text-base"
+      >
+        {loading ? '일정 구성 중…' : replanning ? '일정 수정이 끝난 뒤 만들 수 있습니다' : '일정 만들기'}
       </button>
     </form>
   )

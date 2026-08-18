@@ -64,11 +64,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   loading: false,
   loadingStep: null,
   replanning: false,
+  replanSeq: 0,
   saving: false,
   error: null,
   replanMessage: null,
   saveMessage: null,
   replanPrompt: '',
+  screen: 'home',
+  resultTab: 'itinerary',
+  jobToast: null,
   result: null,
   tripId: null,
   tripTitle: '내 일본 여행',
@@ -116,6 +120,21 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   ...createPlannerActions(set, get),
   ...createEditDayActions(set, get),
 
+  goHome: () => {
+    set({ screen: 'home' })
+  },
+
+  showResult: (tab) => {
+    if (!get().result) return
+    set({
+      screen: 'result',
+      resultTab: tab ?? get().resultTab,
+      jobToast: null,
+    })
+  },
+
+  dismissJobToast: () => set({ jobToast: null }),
+
   reset: () => {
     window.history.replaceState({}, '', window.location.pathname)
     set({
@@ -129,6 +148,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       tripId: null,
       shareUrl: null,
       loadingStep: null,
+      screen: 'home',
+      resultTab: 'itinerary',
+      jobToast: null,
+      replanning: false,
+      replanSeq: get().replanSeq + 1,
       swapForPlaceId: null,
       swapSuggestions: [],
       swapMessage: null,

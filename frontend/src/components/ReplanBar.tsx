@@ -18,6 +18,7 @@ export function ReplanBar({ embedded = false }: { embedded?: boolean }) {
   const selectedDayIndex = usePlannerStore((s) => s.selectedDayIndex)
   const setField = usePlannerStore((s) => s.setField)
   const replan = usePlannerStore((s) => s.replan)
+  const goHome = usePlannerStore((s) => s.goHome)
 
   function applyChip(chip: string) {
     if (chip === '이 장소 빼줘') {
@@ -36,12 +37,14 @@ export function ReplanBar({ embedded = false }: { embedded?: boolean }) {
         className={`flex flex-col gap-3 ${embedded ? '' : 'mx-auto max-w-7xl gap-2'}`}
         onSubmit={(e) => {
           e.preventDefault()
+          if (!replanPrompt.trim() || replanning) return
           void replan()
+          setField('resultTab', 'itinerary')
         }}
       >
         {embedded ? (
           <p className="text-xs text-mist/55">
-            먹고 싶은 것·빼고 싶은 장소를 적으면 Places에서 찾아 반영합니다.
+            반영을 누르면 뒤에서 수정합니다. 홈·다른 탭으로 이동해도 됩니다.
           </p>
         ) : null}
         <div className="flex flex-wrap items-center gap-2">
@@ -75,18 +78,33 @@ export function ReplanBar({ embedded = false }: { embedded?: boolean }) {
             disabled={replanning || !replanPrompt.trim()}
             className="jp-btn jp-btn-primary text-xs"
           >
-            {replanning ? '반영 중…' : '반영하기'}
+            {replanning ? '수정 중…' : '반영하기'}
           </button>
         </div>
       </form>
-      {replanMessage ? (
+      {replanning ? (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <p className="text-xs text-gold/85">완료되면 상단에 알려 드립니다.</p>
+          <button type="button" className="jp-btn jp-btn-ghost text-xs" onClick={goHome}>
+            홈으로
+          </button>
+          <button
+            type="button"
+            className="jp-btn jp-btn-secondary text-xs"
+            onClick={() => setField('resultTab', 'itinerary')}
+          >
+            일정 보기
+          </button>
+        </div>
+      ) : null}
+      {replanMessage && !replanning ? (
         <p
           className={`mt-2 whitespace-pre-line text-xs text-gold ${embedded ? 'px-0' : 'mx-auto max-w-7xl'}`}
         >
           {replanMessage}
         </p>
       ) : null}
-      {error ? (
+      {error && !replanning ? (
         <p
           className={`mt-2 whitespace-pre-line text-xs text-ember ${embedded ? 'px-0' : 'mx-auto max-w-7xl'}`}
         >

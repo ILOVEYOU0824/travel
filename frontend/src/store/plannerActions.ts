@@ -57,6 +57,10 @@ export function createPlannerActions(set: Set, get: Get) {
         set({ error: '일정 짜기는 카카오 로그인이 필요합니다.' })
         return
       }
+      if (get().replanning) {
+        set({ error: '일정 수정이 끝난 뒤 새 일정을 만들어 주세요.' })
+        return
+      }
       if (dayRegions.some((d) => !d.region.trim())) {
         set({ error: '모든 날짜의 지역을 입력해 주세요.' })
         return
@@ -67,6 +71,7 @@ export function createPlannerActions(set: Set, get: Get) {
         'Google 경로로 이동·환승을 확인하는 중…',
         '공항특급·숙소 Klook 안내를 붙이는 중…',
       ]
+      window.history.replaceState({}, '', window.location.pathname)
       set({
         loading: true,
         loadingStep: steps[0],
@@ -75,6 +80,7 @@ export function createPlannerActions(set: Set, get: Get) {
         saveMessage: null,
         shareUrl: null,
         tripId: null,
+        jobToast: null,
       })
       let stepIdx = 0
       const stepTimer = window.setInterval(() => {
@@ -102,6 +108,8 @@ export function createPlannerActions(set: Set, get: Get) {
           result,
           loading: false,
           loadingStep: null,
+          screen: 'result',
+          resultTab: 'itinerary',
           selectedDayIndex: 0,
           selectedPlaceId: result.days[0]?.items[0]?.place.place_id ?? null,
         })
@@ -123,8 +131,11 @@ export function createPlannerActions(set: Set, get: Get) {
         includeTravelTimes,
         selectedDayIndex,
         travelMode,
+        tripId,
+        tripTitle,
+        arrivalAirportQuery,
       } = get()
-      if (!result || !replanPrompt.trim()) return
+      if (!result || !replanPrompt.trim() || get().replanning) return
       const token = await getAccessToken()
       if (!token) {
         set({ error: '일정 수정은 카카오 로그인이 필요합니다.' })
@@ -132,12 +143,14 @@ export function createPlannerActions(set: Set, get: Get) {
       }
       const fallbackRegion =
         dayRegions[selectedDayIndex]?.region || dayRegions[0]?.region || '오사카'
+      const seq = get().replanSeq + 1
       set({
         replanning: true,
-        loadingStep: '요청을 반영해 일정을 다시 짜는 중…',
+        replanSeq: seq,
         error: null,
         replanMessage: null,
         saveMessage: null,
+        jobToast: null,
       })
       try {
         const data = await replanItinerary({
@@ -147,21 +160,53 @@ export function createPlannerActions(set: Set, get: Get) {
           include_travel_times: includeTravelTimes,
           travel_mode: travelMode,
         })
+        if (get().replanSeq !== seq) return
         const day = data.days[selectedDayIndex] ?? data.days[0]
         set({
           result: data,
           replanning: false,
-          loadingStep: null,
           replanMessage: data.message,
           replanPrompt: data.unchanged ? replanPrompt : '',
           selectedPlaceId: day?.items[0]?.place.place_id ?? null,
           shareUrl: null,
+          jobToast: {
+            kind: 'success',
+            title: '일정 수정 완료하였습니다',
+            detail: data.unchanged ? data.message : null,
+            action: 'open-result',
+          },
         })
+        if (tripId && !data.unchanged) {
+          const meta = {
+            candidates_count: data.candidates_count,
+            llm_source: data.llm_source,
+            day_regions: dayRegions,
+            budget_tier: data.budget_tier,
+            budget_krw_per_person: data.budget_krw_per_person,
+            budget_per_person_per_day_krw: data.budget_per_person_per_day_krw,
+            budget_note: data.budget_note,
+            travelers: data.travelers,
+            budget_krw_total: data.budget_krw_total,
+            arrival_airport_query: arrivalAirportQuery || null,
+          }
+          void updateTrip(tripId, {
+            title: tripTitle.trim() || '내 일본 여행',
+            itinerary: data.days,
+            meta,
+          }).catch(() => undefined)
+        }
       } catch (err) {
+        if (get().replanSeq !== seq) return
+        const message = err instanceof Error ? err.message : '일정 재조정에 실패했습니다.'
         set({
           replanning: false,
-          loadingStep: null,
-          error: err instanceof Error ? err.message : '일정 재조정에 실패했습니다.',
+          error: message,
+          jobToast: {
+            kind: 'error',
+            title: '일정 수정에 실패했습니다',
+            detail: message,
+            action: null,
+          },
         })
       }
     },
@@ -216,7 +261,11 @@ export function createPlannerActions(set: Set, get: Get) {
     },
 
     openTrip: async (tripId: string) => {
-      set({ loading: true, loadingStep: '저장된 일정을 불러오는 중…', error: null })
+      if (get().replanning) {
+        set({ error: '일정 수정이 끝난 뒤 다른 일정을 열어 주세요.' })
+        return
+      }
+      set({ loading: true, loadingStep: '저장된 일정을 불러오는 중…', error: null, jobToast: null })
       try {
         const record = await loadTrip(tripId)
         const asResult: ItineraryResponse = {
@@ -247,6 +296,8 @@ export function createPlannerActions(set: Set, get: Get) {
           shareUrl: tripShareUrl(record.id),
           loading: false,
           loadingStep: null,
+          screen: 'result',
+          resultTab: 'itinerary',
           selectedDayIndex: 0,
           selectedPlaceId: record.itinerary[0]?.items[0]?.place.place_id ?? null,
         })

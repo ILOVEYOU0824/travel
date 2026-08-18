@@ -21,30 +21,23 @@ const TIPS_GENERATE = [
   '공항·열차·숙소 안내를 붙이는 중…',
 ]
 
-const TIPS_REPLAN = [
-  '요청을 읽고 일정을 다시 짜는 중…',
-  '새 후보를 Places에서 찾는 중…',
-  '이동 경로를 다시 계산하는 중…',
-]
-
 const TIPS_SAVE = ['일정을 안전하게 저장하는 중…', '공유 링크를 준비하는 중…']
 
 export function LoadingOverlay() {
   const loading = usePlannerStore((s) => s.loading)
-  const replanning = usePlannerStore((s) => s.replanning)
   const saving = usePlannerStore((s) => s.saving)
   const loadingStep = usePlannerStore((s) => s.loadingStep)
 
-  const active = loading || replanning || saving
+  const active = loading || saving
   const [frame, setFrame] = useState(0)
   const [tipIndex, setTipIndex] = useState(0)
   const [honeyTipIndex, setHoneyTipIndex] = useState(0)
   const [progress, setProgress] = useState(12)
 
-  const tips = saving ? TIPS_SAVE : replanning ? TIPS_REPLAN : TIPS_GENERATE
-  const title = saving ? '저장 중' : replanning ? '일정 다시 짜는 중' : '일정을 짜는 중'
+  const tips = saving ? TIPS_SAVE : TIPS_GENERATE
+  const title = saving ? '저장 중' : '일정을 짜는 중'
   const subtitle = loadingStep || tips[tipIndex % tips.length]
-  const showHoneyTips = loading || replanning
+  const showHoneyTips = loading
   const honeyTip = JAPAN_TRAVEL_TIPS[honeyTipIndex % JAPAN_TRAVEL_TIPS.length]
 
   useEffect(() => {

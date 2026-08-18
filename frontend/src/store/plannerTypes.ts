@@ -1,5 +1,15 @@
 import type { DayRegion, ItineraryResponse, Place, TravelModePref } from '../types'
 
+export type AppScreen = 'home' | 'result'
+export type ResultTab = 'itinerary' | 'map' | 'prepare' | 'edit' | 'info'
+
+export type JobToast = {
+  kind: 'success' | 'error'
+  title: string
+  detail?: string | null
+  action: 'open-result' | null
+} | null
+
 export interface PlannerState {
   startDate: string
   endDate: string
@@ -20,11 +30,15 @@ export interface PlannerState {
   loading: boolean
   loadingStep: string | null
   replanning: boolean
+  replanSeq: number
   saving: boolean
   error: string | null
   replanMessage: string | null
   saveMessage: string | null
   replanPrompt: string
+  screen: AppScreen
+  resultTab: ResultTab
+  jobToast: JobToast
   result: ItineraryResponse | null
   tripId: string | null
   tripTitle: string
@@ -50,5 +64,8 @@ export interface PlannerState {
   clearSwapSuggestions: () => void
   save: () => Promise<void>
   openTrip: (tripId: string) => Promise<void>
+  goHome: () => void
+  showResult: (tab?: ResultTab) => void
+  dismissJobToast: () => void
   reset: () => void
 }

@@ -1,6 +1,7 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense } from 'react'
 import { budgetTierLabel } from '../lib/format'
 import { usePlannerStore } from '../store/plannerStore'
+import type { ResultTab } from '../store/plannerTypes'
 import { AuthBar } from './AuthBar'
 import { DayTimeline } from './DayTimeline'
 import { ReplanBar } from './ReplanBar'
@@ -14,8 +15,6 @@ const ItineraryMap = lazy(() =>
   import('./ItineraryMap').then((m) => ({ default: m.ItineraryMap })),
 )
 
-type ResultTab = 'itinerary' | 'map' | 'prepare' | 'edit' | 'info'
-
 const TABS: Array<{ id: ResultTab; label: string; short: string }> = [
   { id: 'itinerary', label: '일정·이동', short: '일정' },
   { id: 'map', label: '지도(크게)', short: '지도' },
@@ -28,36 +27,58 @@ const TABS: Array<{ id: ResultTab; label: string; short: string }> = [
 export function ResultShell() {
   const result = usePlannerStore((s) => s.result)
   const selectedDayIndex = usePlannerStore((s) => s.selectedDayIndex)
+  const tab = usePlannerStore((s) => s.resultTab)
+  const setField = usePlannerStore((s) => s.setField)
   const reset = usePlannerStore((s) => s.reset)
-  const [tab, setTab] = useState<ResultTab>('itinerary')
+  const goHome = usePlannerStore((s) => s.goHome)
+  const replanning = usePlannerStore((s) => s.replanning)
 
   if (!result) return null
 
   const day = result.days[selectedDayIndex]
+
+  function setTab(next: ResultTab) {
+    setField('resultTab', next)
+  }
+
+  function onReset() {
+    if (replanning) {
+      const ok = window.confirm('일정 수정이 진행 중입니다. 나가면 이번 수정은 버려집니다. 나갈까요?')
+      if (!ok) return
+    }
+    reset()
+  }
 
   return (
     <div className="washi-bg flex h-[100svh] flex-col overflow-hidden text-fog">
       <header className="shrink-0 border-b border-white/10 px-3 py-2.5 sm:px-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2.5">
-            <img src="/generated/seal-tabi.png" alt="" className="h-8 w-8 shrink-0 object-contain" />
-            <div className="min-w-0">
-              <p className="font-display text-base tracking-wide text-fog sm:text-lg">
-                JapanTrip
-                <span className="ml-1.5 text-[10px] tracking-[0.2em] text-gold">旅</span>
-              </p>
-              <p className="truncate text-[11px] text-mist/55">
-                {result.budget_tier ? `${budgetTierLabel(result.budget_tier)} · ` : ''}
-                Google 지도 실제 장소만
-                {result.validation.removed_items_count > 0
-                  ? ` · ${result.validation.removed_items_count}곳 제외`
-                  : ''}
-              </p>
-            </div>
+            <button
+              type="button"
+              onClick={goHome}
+              className="flex min-w-0 cursor-pointer items-center gap-2.5 text-left transition hover:opacity-90"
+              aria-label="홈으로"
+            >
+              <img src="/generated/seal-tabi.png" alt="" className="h-8 w-8 shrink-0 object-contain" />
+              <div className="min-w-0">
+                <p className="font-display text-base tracking-wide text-fog sm:text-lg">
+                  JapanTrip
+                  <span className="ml-1.5 text-[10px] tracking-[0.2em] text-gold">旅</span>
+                </p>
+                <p className="truncate text-[11px] text-mist/55">
+                  {result.budget_tier ? `${budgetTierLabel(result.budget_tier)} · ` : ''}
+                  Google 지도 실제 장소만
+                  {result.validation.removed_items_count > 0
+                    ? ` · ${result.validation.removed_items_count}곳 제외`
+                    : ''}
+                </p>
+              </div>
+            </button>
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <AuthBar />
-            <button type="button" onClick={reset} className="jp-btn jp-btn-ghost text-xs">
+            <button type="button" onClick={onReset} className="jp-btn jp-btn-ghost text-xs">
               다시 만들기
             </button>
           </div>
