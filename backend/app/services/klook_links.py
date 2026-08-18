@@ -4,7 +4,7 @@
 어필리에이트 래핑은 env 템플릿/marker만 사용 (형식 추측 최소화).
 
 검색 결과 URL 형태(실측):
-https://www.klook.com/ko/search/result/?query=...&search_scope=main_search&date_range=YYYY-MM-DD&sort=most_relevant&tab_key=0&start=1
+https://www.klook.com/ko/search/result/?query=...&search_scope=main_search&date_range=YYYY-MM-DD
 날짜는 query 문자열이 아니라 date_range 로 분리해야 호텔 필터가 적용된다.
 """
 
@@ -29,9 +29,6 @@ def klook_search_url(query: str, *, date_range: str | None = None) -> str:
     params: dict[str, str] = {
         "query": q,
         "search_scope": "main_search",
-        "sort": "most_relevant",
-        "tab_key": "0",
-        "start": "1",
     }
     dr = (date_range or "").strip()
     if dr:

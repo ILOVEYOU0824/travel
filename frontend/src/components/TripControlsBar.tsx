@@ -1,3 +1,4 @@
+import { AffiliateOutboundLink } from './AffiliateOutboundLink'
 import { usePlannerStore } from '../store/plannerStore'
 
 const PREP_LINKS = [
@@ -44,18 +45,16 @@ export function TripControlsBar({ embedded = false }: { embedded?: boolean }) {
             </a>
           ))}
           {ctas.map((cta) => (
-            <a
+            <AffiliateOutboundLink
               key={`${cta.provider}-${cta.label}`}
               href={cta.url}
-              target="_blank"
-              rel="noreferrer sponsored"
               className={`jp-btn text-xs ${
                 cta.provider === 'kkday' ? 'jp-btn-kkday' : 'jp-btn-klook'
               }`}
               title={cta.hint}
             >
               {cta.label.replace(/^KKday에서\s*/, '').replace(/^Klook에서\s*/, '')}
-            </a>
+            </AffiliateOutboundLink>
           ))}
         </div>
         <p className="text-[11px] leading-relaxed text-mist/45">
